@@ -83,27 +83,9 @@ def get_plugin_setting(url, headers):
     data = graphql(url, query, headers=headers)
     plugins = data.get("configuration", {}).get("plugins", {})
 
-    possible_keys = [
-        "addSceneTagsbyFolder",
-        "Add Scene Tags by Folder",
-        "addSceneTagsByFolder",
-        "folderAutoTags",
-        "Folder Auto Tags",
-    ]
+    plugin_config = plugins.get("addSceneTagsbyFolder", {})
 
-    for key in possible_keys:
-        plugin_config = plugins.get(key)
-        if plugin_config:
-            settings = plugin_config.get("settings", {})
-            value = settings.get("folder_tag_map", "")
-            if value:
-                return value
-
-    raise RuntimeError(
-        "Could not find folder_tag_map. "
-        f"Available plugin config keys: {list(plugins.keys())}. "
-        f"Plugin config dump: {json.dumps(plugins, indent=2)}"
-    )
+    return plugin_config.get("folder_tag_map", "")
 
 def get_library_directories(url, headers):
     query = """
