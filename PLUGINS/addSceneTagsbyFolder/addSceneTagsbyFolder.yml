@@ -1,0 +1,22 @@
+name: Add Scene Tags by Folder
+description: Applies tags to scenes based on the containing folder path.
+version: 0.1.0
+
+settings:
+  folder_tag_map:
+    displayName: Folder tag map JSON
+    type: STRING
+
+exec:
+  - python3
+  - "{pluginDir}/addSceneTagsbyFolder.py"
+
+interface: raw
+errLog: info
+
+tasks:
+  - name: Generate folder tag map template
+    description: Outputs JSON mapping of current library directories with empty tag lists.
+
+  - name: Apply folder tags
+    description: Apply configured tags to scenes whose file path is under each mapped folder.
