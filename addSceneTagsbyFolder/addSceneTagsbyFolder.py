@@ -86,19 +86,24 @@ def get_plugin_setting(url, headers):
     possible_keys = [
         "addSceneTagsbyFolder",
         "Add Scene Tags by Folder",
+        "addSceneTagsByFolder",
         "folderAutoTags",
         "Folder Auto Tags",
     ]
 
-    plugin_config = {}
-
     for key in possible_keys:
-        if key in plugins:
-            plugin_config = plugins[key]
-            break
+        plugin_config = plugins.get(key)
+        if plugin_config:
+            settings = plugin_config.get("settings", {})
+            value = settings.get("folder_tag_map", "")
+            if value:
+                return value
 
-    settings = plugin_config.get("settings", {})
-    return settings.get("folder_tag_map", "")
+    raise RuntimeError(
+        "Could not find folder_tag_map. "
+        f"Available plugin config keys: {list(plugins.keys())}. "
+        f"Plugin config dump: {json.dumps(plugins, indent=2)}"
+    )
 
 def get_library_directories(url, headers):
     query = """
