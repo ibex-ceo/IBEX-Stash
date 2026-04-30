@@ -6,6 +6,9 @@ settings:
   folder_tag_map:
     displayName: Folder tag map JSON
     type: STRING
+  dry_run:
+    displayName: Dry run
+    type: BOOLEAN
 
 exec:
   - python3
