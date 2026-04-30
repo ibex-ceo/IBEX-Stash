@@ -83,15 +83,22 @@ def get_plugin_setting(url, headers):
     data = graphql(url, query, headers=headers)
     plugins = data.get("configuration", {}).get("plugins", {})
 
-    plugin_config = (
-        plugins.get("folderAutoTags")
-        or plugins.get("Folder Auto Tags")
-        or {}
-    )
+    possible_keys = [
+        "addSceneTagsbyFolder",
+        "Add Scene Tags by Folder",
+        "folderAutoTags",
+        "Folder Auto Tags",
+    ]
+
+    plugin_config = {}
+
+    for key in possible_keys:
+        if key in plugins:
+            plugin_config = plugins[key]
+            break
 
     settings = plugin_config.get("settings", {})
     return settings.get("folder_tag_map", "")
-
 
 def get_library_directories(url, headers):
     query = """
